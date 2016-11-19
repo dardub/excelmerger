@@ -1,0 +1,23 @@
+<h2>Show product order</h2>
+
+<ul>
+
+  <li>
+    <strong>Qty:</strong>
+    <%= @product_order.qty %>
+  </li>
+
+  <li>
+    <strong>Sku:</strong>
+    <%= @product_order.sku %>
+  </li>
+
+  <li>
+    <strong>Packing list:</strong>
+    <%= @product_order.packing_list_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: product_order_path(@conn, :edit, @product_order) %>
+<%= link "Back", to: product_order_path(@conn, :index) %>

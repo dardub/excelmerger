@@ -1,0 +1,6 @@
+<h2>Edit packing list</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: packing_list_path(@conn, :update, @packing_list) %>
+
+<%= link "Back", to: packing_list_path(@conn, :index) %>

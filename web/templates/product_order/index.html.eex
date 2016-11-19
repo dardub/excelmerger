@@ -1,0 +1,30 @@
+<h2>Listing product orders</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Qty</th>
+      <th>Sku</th>
+      <th>Packing list</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for product_order <- @product_orders do %>
+    <tr>
+      <td><%= product_order.qty %></td>
+      <td><%= product_order.sku %></td>
+      <td><%= product_order.packing_list_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: product_order_path(@conn, :show, product_order), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: product_order_path(@conn, :edit, product_order), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: product_order_path(@conn, :delete, product_order), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New product order", to: product_order_path(@conn, :new) %>
