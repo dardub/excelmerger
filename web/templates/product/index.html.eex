@@ -1,30 +1,19 @@
 <h2>Listing products</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Sku</th>
-      <th>Title</th>
-      <th>Inventory</th>
+<%= form_for @changeset, product_path(@conn, :update_products), [multipart: true], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for product <- @products do %>
-    <tr>
-      <td><%= product.sku %></td>
-      <td><%= product.title %></td>
-      <td><%= product.inventory_id %></td>
-
-      <td class="text-right">
-        <%= link "Show", to: product_path(@conn, :show, product), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: product_path(@conn, :edit, product), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: product_path(@conn, :delete, product), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
-      </td>
-    </tr>
+  <div class="form-group">
+    <%= label f, :excel_file, class: "control-label" %>
+    <%= file_input f, :file, class: "form-control" %>
+    <%= error_tag f, :file %>
+  </div>
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
 <% end %>
-  </tbody>
-</table>
-
-<%= link "New product", to: product_path(@conn, :new) %>
+<p>Number of products: <%= @product_count %>

@@ -19,6 +19,10 @@ config :excelmerger, Excelmerger.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :arc,
+  storage: Arc.Storage.S3, # or Arc.Storage.Local
+  bucket: "excelmerger-prod"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

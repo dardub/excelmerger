@@ -17,8 +17,13 @@ defmodule Excelmerger.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+
     resources "/product_orders", ProductOrderController
+
+    get "/packing_lists/:id/download_csv", PackingListController, :download_csv
     resources "/packing_lists", PackingListController
+
+    post "/products/update_products", ProductController, :update_products
     resources "/products", ProductController
   end
 

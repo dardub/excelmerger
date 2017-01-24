@@ -14,5 +14,8 @@
 
 </ul>
 
+<%= link "Download CSV", to: packing_list_path(@conn, :download_csv, @packing_list) %>
+
+
 <%= link "Edit", to: packing_list_path(@conn, :edit, @packing_list) %>
 <%= link "Back", to: packing_list_path(@conn, :index) %>

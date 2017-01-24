@@ -5,6 +5,8 @@ defmodule Excelmerger.PackingList do
     field :name, :string
     field :merged, :integer
 
+    has_many :product_orders, Excelmerger.ProductOrder
+
     timestamps()
   end
 

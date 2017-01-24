@@ -41,3 +41,10 @@ config :excelmerger, Excelmerger.Repo,
   database: "excelmerger_dev",
   hostname: "localhost",
   pool_size: 10
+
+
+import_config "dev.secret.exs"
+
+config :arc,
+  storage: Arc.Storage.S3, # or Arc.Storage.Local
+  bucket: "excelmerger-dev"

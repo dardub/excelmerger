@@ -18,8 +18,21 @@ defmodule Excelmerger.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Excelmerger, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+     applications: [
+       :phoenix,
+       :phoenix_pubsub,
+       :phoenix_html,
+       :cowboy,
+       :logger,
+       :gettext,
+       :phoenix_ecto,
+       :postgrex,
+       :ex_aws,
+       :hackney,
+       :poison,
+       :arc_ecto
+      ]
+    ]
   end
 
   # Specifies which paths to compile per environment.
@@ -38,6 +51,12 @@ defmodule Excelmerger.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:xlsxir, "~> 1.3.5"},
+     {:arc, "~> 0.6.0-rc3"},
+     {:ex_aws, "~> 1.0.0-rc3"},
+     {:hackney, "~> 1.5"},
+     {:poison, "~> 2.0"},
+     {:sweet_xml, "~> 0.5"},
+     {:arc_ecto, "~> 0.5.0-rc1"},
      {:cowboy, "~> 1.0"}]
   end
 

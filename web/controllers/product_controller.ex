@@ -2,10 +2,58 @@ defmodule Excelmerger.ProductController do
   use Excelmerger.Web, :controller
 
   alias Excelmerger.Product
+  alias Excelmerger.Spreadsheets
+  # alias Excelmerger.ExcelFile
 
   def index(conn, _params) do
     products = Repo.all(Product)
-    render(conn, "index.html", products: products)
+    product_count = Repo.aggregate(Product, :count, :id)
+    changeset = Product.changeset(%Product{})
+    # render(conn, "index.html", products: products, changeset: changeset)
+    render(conn, "index.html", product_count: product_count, changeset: changeset)
+  end
+
+  def update_products(conn, %{"product" => %{"file" => file}}) do
+
+    # Clear all and start fresh
+    Repo.delete_all(Product)
+
+    scope = %{ id: :master_product_list }
+
+    file_url = "/Users/darren/Desktop/elixirmerge/excel_import.xlsx"
+    File.cp(file.path, file_url)
+
+    # Below for using arc
+    # {:ok, filename } = ExcelFile.store({file, scope})
+    # file_url = ExcelFile.url({filename, scope}, :original, signed: true)
+
+
+    params_list =
+      case Xlsxir.extract(file_url, 0, true) do
+        {:ok, _time} ->
+          Xlsxir.get_list
+          |> Spreadsheets.transform_header([:inventory_id, :title, :qty, :sku])
+          |> Spreadsheets.to_map
+          |> Enum.filter(fn(x) -> Map.has_key?(x, :sku) end)
+          |> Spreadsheets.filter_data([:inventory_id, :title, :sku])
+          |> Spreadsheets.add_timestamps
+          |> Enum.sort(&(&1.sku > &2.sku)) # Sort by sku for dedup function
+          |> Enum.dedup_by(fn (x) -> x.sku end)
+
+        {:error, message} ->
+          IO.puts 'Error: #{message}'
+          []
+      end
+    Xlsxir.close
+
+    Enum.chunk(params_list, 1000)
+    |> Enum.map(fn(batch_list) ->
+      Repo.insert_all(Product, batch_list)
+    end)
+
+    conn
+      |> put_flash(:info, "Product created successfully.")
+      |> redirect(to: product_path(conn, :index))
   end
 
   def new(conn, _params) do

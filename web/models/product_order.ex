@@ -5,6 +5,7 @@ defmodule Excelmerger.ProductOrder do
     field :qty, :integer
     field :sku, :string
     belongs_to :packing_list, Excelmerger.PackingList
+    has_one :product, Excelmerger.Product, foreign_key: :sku
 
     timestamps()
   end
