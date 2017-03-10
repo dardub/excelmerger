@@ -93,7 +93,7 @@ defmodule Excelmerger.PackingListController do
     |> join(:inner, [f], p in ShopProduct, f.master_object_id == p.id)
 
     query = from po in ProductOrder,
-              join: p in Product, where: p.sku == po.sku,
+              left_join: p in Product, where: p.sku == po.sku,
               select: {  p.inventory_id,  p.title, po.qty, po.sku }
 
     packing_list = Repo.get!(PackingList, id) |> Repo.preload(product_orders: query)

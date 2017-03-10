@@ -16,4 +16,5 @@
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
+<p>Only allowed columns: InventoryId, Title, Quanitity, Sku</p>
 <p>Number of products: <%= @product_count %>

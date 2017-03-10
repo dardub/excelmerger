@@ -46,10 +46,14 @@ defmodule Excelmerger.ProductController do
       end
     Xlsxir.close
 
-    Enum.chunk(params_list, 1000)
+    Enum.chunk(params_list, 500, 500, [])
     |> Enum.map(fn(batch_list) ->
       Repo.insert_all(Product, batch_list)
     end)
+
+    IO.puts "*****************************"
+    IO.puts Enum.count(params_list)
+    IO.puts "*****************************"
 
     conn
       |> put_flash(:info, "Product created successfully.")
