@@ -44,7 +44,3 @@ config :excelmerger, Excelmerger.Repo,
 
 
 import_config "dev.secret.exs"
-
-config :arc,
-  storage: Arc.Storage.S3, # or Arc.Storage.Local
-  bucket: "excelmerger-dev"

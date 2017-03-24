@@ -13,8 +13,10 @@ use Mix.Config
 # which you typically run after static files are built.
 config :excelmerger, Excelmerger.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
+  url: [scheme: "https", host: "quiet-brook-35213.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/manifest.json"
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -22,6 +24,22 @@ config :logger, level: :info
 config :arc,
   storage: Arc.Storage.S3, # or Arc.Storage.Local
   bucket: "excelmerger-prod"
+
+config :excelmerger, Excelmerger.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  ssl: true
+
+config :arc,
+  storage: Arc.Storage.S3, # or Arc.Storage.Local
+  bucket: "excelmerger-dev"
+
+config :ex_aws,
+  access_key_id: System.get_env("AWS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_SECRET_KEY"),
+  debug_requests: true,
+  region: "us-east-1"
 
 # ## SSL Support
 #
@@ -62,4 +80,4 @@ config :arc,
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
