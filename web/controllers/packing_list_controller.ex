@@ -22,8 +22,16 @@ defmodule Excelmerger.PackingListController do
 
     changeset = PackingList.changeset(%PackingList{}, %{name: name, merged: Utilities.string_bool_to_int(merged)})
 
+    temp_file =
+      DateTime.utc_now
+      |> DateTime.to_string
+      |> :erlang.md5
+      |> Base.encode16(case: :lower)
+      |> (&("/tmp/sublist_import_#{&1}.xlsx")).()
 
-    File.cp(file.path, "/Users/darren/Desktop/elixirmerge/sublist_import.xlsx")
+
+
+    File.cp(file.path, temp_file)
 
     new_packing_list = case Repo.insert(changeset) do
 
@@ -40,7 +48,7 @@ defmodule Excelmerger.PackingListController do
 
     # Insert Related records
     params_list =
-      case Xlsxir.extract("/Users/darren/Desktop/elixirmerge/sublist_import.xlsx", 0, true) do
+      case Xlsxir.extract(temp_file, 0, true) do
         {:ok, _time} ->
           Xlsxir.get_list
           |> Spreadsheets.transform_header([:sku, :qty])
@@ -101,12 +109,12 @@ defmodule Excelmerger.PackingListController do
     filename   = build_csv(["InventoryId\tTitle\tQuantity\tBarCode"], packing_list.product_orders)
 
     conn
-    |> put_resp_header("content-disposition", ~s(attachment; filename="export-#{DateTime.to_unix(DateTime.utc_now)}.txt"))
+    |> put_resp_header("content-disposition", ~s(attachment; filename="export-#{packing_list.name}-#{DateTime.to_unix(DateTime.utc_now)}.txt"))
     |> send_file(200, filename)
   end
 
   def build_csv(header, rows) do
-    exports_file = "/Users/darren/Desktop/elixirmerge/export-#{DateTime.to_unix(DateTime.utc_now)}.csv"
+    exports_file = "/tmp/export-#{DateTime.to_unix(DateTime.utc_now)}.csv"
     {:ok, file} = File.open exports_file, [:write]
 
     data = rows

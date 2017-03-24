@@ -20,7 +20,7 @@ defmodule Excelmerger.ProductController do
 
     scope = %{ id: :master_product_list }
 
-    file_url = "/Users/darren/Desktop/elixirmerge/excel_import.xlsx"
+    file_url = "/tmp/excel_import.xlsx"
     File.cp(file.path, file_url)
 
     # Below for using arc
